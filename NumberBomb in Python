@@ -1,0 +1,61 @@
+#Number Bomb is a guessing game where a secret number between 1 and 100 is randomly chosen. 
+#You and the computer take turns guessing numbers within a changing range. 
+#After each guess, the range updates to help narrow down the bomb’s location. 
+#If someone guesses the bomb number, they lose that round. The first to win three rounds wins the whole game.
+
+import random
+
+print("Welcome to Number Bomb.The initial range is from 1 to 100.")
+
+def single_round():
+    bomb=random.randint(1,100)
+    low=1
+    high=100
+    game_continue=True
+    player_win=False
+    while game_continue:
+        #Player's turn
+        print(f"The range is from {low} to {high}.")
+        print("Player's turn.")
+        guess=int(input("Please guess a number:"))
+        if guess not in range(low,high):
+            print("The number is out of range!")
+            continue
+        elif guess>bomb:
+            high=guess-1
+            print("Low.The range is renewed.")
+        elif guess<bomb:
+            low=guess+1
+            print("High.The range is renewed.")
+        else:
+            print("Boom!You are lost.")
+            player_win=False
+            break
+        #computer's turn
+        print(f"Computer's turn.")
+        com_guess=random.randint(low,high)
+        print(f"Computer guessed {com_guess}.")
+        if com_guess>bomb:
+            high=com_guess-1
+            print("Low.The range is renewed.")
+        elif com_guess<bomb:
+            low=com_guess+1
+            print("High.The range is renewed.")
+        else:
+            print("Boom!Computer is lost.")
+            player_win=True
+            break
+    return player_win
+
+Player_score=0
+Computer_score=0
+
+for i in range(1,5):
+    print(f"Round{i}")
+    if single_round():
+        Player_score+=1
+    else:
+        Computer_score+=1
+    if Player_score==3 or Computer_score==3:
+        break
+print(f"Final score:Player{Player_score}:Computer{Computer_score}.")
