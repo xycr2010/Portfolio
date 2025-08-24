@@ -1,0 +1,79 @@
+#Players take turns saying English words. Each new word must begin with the last letter of the previous word, and no word may be repeated during the game.
+#All words must be valid English words, and each must be at least two letters long. 
+#The game continues until one player cannot provide a valid word on their turn, at which point they lose.
+
+import random
+
+#Read word list
+print("Loading word list from file...")
+with open('words.txt', 'r') as WordList:
+    vocabulary=WordList.read().split()
+print("Words loaded.")
+
+#Initialize indicator
+game_continue=True
+player_win=False
+used_word=[]
+round_count=1
+wrong_count=0
+
+#Welcome
+print("Welcome to Word Chain Game!")
+computer_word=random.choice(vocabulary)
+used_word.append(computer_word)
+print(f"The starting word is '{computer_word}'")
+
+while game_continue:
+    if worng_count>=5:
+        player_win=False
+        game_countinue=False
+        break
+    print(f"Round {round_count}:")
+    print(f"History word:{used_word}.")
+    player_word=input("Please enter your answer:")
+    
+    if len(player_word)<2:
+        print("Invalid input!Please input a word in at least two letters!")
+        wrong_count+=1
+        print("Hint:More than 5 invalid answers will lose the game!")
+        continue
+    elif player_word not in vocabulary:
+        print("Invalid input!Word is not in vocabulary!")
+        wrong_count+=1
+        print("Hint:More than 5 invalid answers will lose the game!")
+        continue
+    elif player_word in used_word:
+        print("Invalid input!The word is used!")
+        wrong_count+=1
+        print("Hint:More than 5 invalid answers will lose the game!")
+        continue
+    else:
+        round_count+=1
+        used_word.append(player_word)
+        if computer_word[-1]==player_word[0]:
+            #computer's turn:
+            sub_vocabulary=[]
+            for w in vocabulary:
+                if player_word[-1]==w[0] and w not in used_word:
+                    sub_vocabulary.append(w)
+                    
+            if len(sub_vocabulary)!=0:
+                computer_word=random.choice(sub_vocabulary)
+                used_word.append(computer_word)
+                print(f"The computer answered {computer_word}.")
+            else:
+                player_win=True
+                game_continue = False
+                break  
+        else:
+            print("You got wrong answer!")
+            player_win=False
+            game_continue=False
+
+#Ending
+if player_win:
+    print("Congratulations! You win!")
+    print(f"Finished in round {round_count-1}.")
+else:
+    print("Game over. The computer wins.")
+    print(f"Finished in round {round_count-1}.")  
