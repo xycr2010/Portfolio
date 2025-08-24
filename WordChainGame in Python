@@ -24,7 +24,7 @@ used_word.append(computer_word)
 print(f"The starting word is '{computer_word}'")
 
 while game_continue:
-    if worng_count>=5:
+    if wrong_count>=5:
         player_win=False
         game_countinue=False
         break
